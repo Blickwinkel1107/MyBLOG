@@ -55,100 +55,20 @@
             </ul>
             <!--向右对齐-->
             <ul class="nav navbar-nav navbar-right">
-                <li data-toggle="modal" data-target="#register-modal"><a href="#">
+                {% if user.is_authenticated %}
+                <li class="navbar-text">{{ user.username }}，欢迎您！</li>
+                <li><a href="{% url 'logout' %}?next={{ request.path }}">
+                    <span class="glyphicon glyphicon-user"></span> Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'users:register' %}?next={{ request.path }}">
                     <span class="glyphicon glyphicon-user"></span> Register</a></li>
-                <li  data-toggle="modal" data-target="#login-modal"><a href="#">
+                <li><a href="{% url 'login' %}?next={{ request.path }}">
                     <span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
-<!--注册模态框(modal)-->
-<div class="modal fade" id="register-modal" aria-hidden="true">
-    <div class="modal-dialog" style="width: 500px">
-        <div class="modal-content">
-            <!--标题-->
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h1 class="modal-title">&nbsp;&nbsp; 注册</h1>
-                <p class="text-left text-primary">&nbsp;&nbsp;&nbsp;&nbsp; 第一次访问本站？</p>
-            </div>
-            <!--中间内容-->
-            <div class="modal-body">
-                <!--注册表单-->
-                <form class="form-horizontal" method="post" role="form" style="margin-top: 20px">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="Rusername" class="col-sm-3 control-label">Username</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="Rusername" placeholder="请输入您的用户名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Rpassword" class="col-sm-3 control-label">Password</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="Rpassword" placeholder="请输入您的密码">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Rpassword_confirm" class="col-sm-3 control-label">Confirm Password</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="Rpassword_confirm" placeholder="请再次输入密码">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Remail" class="col-sm-3 control-label">Email address</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="Remail" placeholder="请输入您的邮箱（选填）">
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-top: 30px">
-                        <div class="col-sm-offset-2 col-sm-5">
-                            <button type="submit" class="btn btn-primary" name="btn-register">注册</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!--登录模态框-->
-<div class="modal fade" id="login-modal" aria-hidden="true">
-    <div class="modal-dialog" style="width: 500px">
-        <div class="modal-content">
-            <!--标题-->
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h1 class="modal-title">&nbsp;&nbsp; 登录</h1>
-                <p class="text-left text-primary">&nbsp;&nbsp;&nbsp;&nbsp; 登录以阅览更多精彩内容~</p>
-            </div>
-            <!--中间内容-->
-            <div class="modal-body">
-                <!--登录表单-->
-                <form class="form-horizontal" method="post" role="form" style="margin-top: 20px">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="Lusername" class="col-sm-3 control-label">Username</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="Lusername" placeholder="请输入您的用户名">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Lpassword" class="col-sm-3 control-label">Password</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" name="Lpassword" placeholder="请输入您的密码">
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-top: 30px">
-                        <div class="col-sm-offset-2 col-sm-5">
-                             <button type="submit" class="btn btn-primary" name="btn-login">登录</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 <!--轮播-->
 <div id="myCarousel" class="carousel slide" style="margin-bottom: 50px;">
     <!-- 轮播（Carousel）指标 -->

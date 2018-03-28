@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from mysite import views
 from django.conf.urls import url
+from django.conf.urls import url, include
+from django.contrib import admin
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -24,4 +26,9 @@ urlpatterns = [
     url(r'^calc$', views.calc),
     url(r'^calc-post$', views.calc_post),
     url(r'^index$', views.index),
+    url(r'^admin/', admin.site.urls),
+    # 别忘记在顶部引入 include 函数
+    url(r'^users/', include('users.urls')),
+    # 将 auth 应用中的 urls 模块包含进来
+    url(r'^users/', include('django.contrib.auth.urls')),
 ]

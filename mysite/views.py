@@ -15,14 +15,13 @@ def index(req):
 def articles(req):
     ctx = {}
     c = connection.cursor()
-    c.execute('select * from articles')
+    c.execute('select * from articles order by time desc')
     ctx['articles'] = c.fetchall()
     if req.is_ajax():
         # print(req.body)
         mdHTML = req.POST['mdHTML']
-        c.execute('select count(*) from articles')
-        nrows = c.fetchall()
-        c.execute('insert into articles(id, content) values(%s, %s)', [1 + nrows[0][0], mdHTML])
+        timestamp = req.POST['timestamp']
+        c.execute('insert into articles(time, content) values(%s, %s)', [timestamp, mdHTML])
     return render(req, 'articles.html', ctx)
 
 def hello(req):

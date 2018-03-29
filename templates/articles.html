@@ -2,23 +2,12 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <meta charset="UTF-8">
     <!--Markdown Editor-->
     <link rel="stylesheet" href="static/editor.md-master/css/editormd.css" />
     <!--Boostrap组件引入-->
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--Echarts-->
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
     <title>Articles</title>
 </head>
 <body>
@@ -67,74 +56,107 @@
         </div>
     </div>
 </nav>
-<!--引入-->
-<div class="container">
-    <!--Art1-->
-    <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-8 well well-lg jumbotron">
-            <h1>岳翔的网站</h1>
-            <small>本行内容是在标签内</small><br>
-            <strong>本行内容是在标签内</strong><br>
-            <em>本行内容是在标签内，并呈现为斜体</em><br>
-            <p class="text-left">向左对齐文本向左对齐文本向左对齐文本向左对齐文本向左对齐文本向左对齐文本</p>
-            <p class="text-center">居中对齐文本</p>
-            <p class="text-right">向右对齐文本</p>
-            <p class="text-muted">本行内容是减弱的</p>
-            <p class="text-primary">本行内容带有一个 primary class</p>
-            <p class="text-success">本行内容带有一个 success class</p>
-            <p class="text-info">本行内容带有一个 info class</p>
-            <p class="text-warning">本行内容带有一个 warning class</p>
-            <p class="text-danger">本行内容带有一个 danger class</p>
-        </div>
-        <!--第二列-->
-        <div class="col-sm-2 well">
-            <h1>侧边栏</h1>
-            <p class="text-left">This is a string of testing text, here's a reminder,
-                fuck you motherfucker!<br />
-                ThisIsATesting, TextThisIsATesting, TextThisIsATestingT, extThisIsATestingText<br />
-                ThisIsATesting, TextThisIsATesting, TextThisIsATestingTe, xtThisIsATestingText</p>
-        </div>
-        <div class="col-sm-1">
-
-        </div>
-    </div>
-    <!--Art2-->
+<!--mdEditor-->
+{% if user.is_authenticated %}
+<div class="container" style="margin-bottom: 30px">
     <div class="row">
         <div class="col-sm-1"></div>
-        <div class="col-sm-8 well well-lg" >
-            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-            <div id="main" style="width: available; height:400px;"></div>
-            <script type="text/javascript" src="static/js/plot1.js"></script>
+        <div class="col-sm-11">
+        <button class="btn btn-info btn-lg" onclick="showMdEditor()" style="margin-bottom: 30px;display: inline">
+            写博文 ☛ Click Me！</button>
         </div>
-        <div class="col-sm-3"></div>
     </div>
-    <!--循环渲染博文-->
-    {% for article in articles %}
-    <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-8 well well-lg">
-            {% autoescape off %}
-                {{ article.1 }}
-            {% endautoescape %}
-        </div>
-        <div class="col-sm-3"></div>
-    </div>
-    {% endfor %}
-    {% if user.is_authenticated %}
-    <button class="btn btn-primary" onclick="showMdEditor()" style="margin-bottom: 30px">显示编辑器</button>
     <div class="row" style="display: none;" id="mdeditor">
-        <div class="col-sm-12 well">
+        <div class="col-sm-12">
             <div id="test-editormd">
                 <textarea style="display:none;"></textarea>
             </div>
+            <button type="submit" class="btn btn-success btn-lg" onclick="getMdHTML()" style="margin-top: 10px;margin-left: 50px">
+                发布博文！</button>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="getMdHTML()" style="margin-top: 30px">提交</button>
     </div>
-    {% endif %}
 </div>
-
+{% else %}
+<div id="test-editormd" style="display: none"></div>
+{% endif %}
+<!--文章-->
+<div class="container">
+    <div class="clearfix visible-xs"></div>
+    <div class="col-sm-1"></div>
+    <!--left-->
+    <div class="col-sm-8">
+        <!--循环渲染博文-->
+        {% for article in articles %}
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div class="markdown-body editormd-html-preview">
+                        {% autoescape off %}
+                        {{ article.1 }}
+                        {% endautoescape %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="clearfix visible-xs"></div>  <!--垂直排列-->
+    <div class="col-sm-3">
+        <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseOne">
+                        点击我进行展开，再次点击我进行折叠。第 1 部分
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                    vice lomo.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseTwo">
+                        点击我进行展开，再次点击我进行折叠。第 2 部分
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                    vice lomo.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseThree">
+                        点击我进行展开，再次点击我进行折叠。第 3 部分
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                    vice lomo.
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
 
 <!--底部copyright-->
 <footer class="footer">
@@ -149,11 +171,14 @@
     </div>
 </footer>
 <!--mdeditor-->
-    <link rel="stylesheet" href="static/editor.md-master/css/editormd.preview.css" />
-    <script src="static/editor.md-master/examples/js/jquery.min.js"></script>
-    <script src="static/editor.md-master/editormd.js"></script>
+<link rel="stylesheet" href="static/editor.md-master/css/editormd.preview.css" />
+<script src="static/editor.md-master/examples/js/jquery.min.js"></script>
+<script src="static/editor.md-master/editormd.js"></script>
 <script type="text/javascript">
-    let editer;
+    let editer = editormd("test-editormd", {
+                tex: true,
+                path    : "static/editor.md-master/lib/",
+            });
     function showMdEditor(){
         let opened = document.getElementById('mdeditor').style.display;
         if(opened === 'none'){
@@ -162,6 +187,8 @@
                 width   : "100%",
                 height  : 640,
                 syncScrolling : "both",
+                tex: true,
+                flowChart: true,
                 //你的lib目录的路径，我这边用JSP做测试的
                 path    : "static/editor.md-master/lib/",
                 //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
@@ -174,14 +201,19 @@
         }
     }
     function getMdHTML(){
-        let str_html = editer.getHTML();
-        console.log(str_html);
+        let timestamp = (new Date).valueOf();
+        let str_html = editer.getPreviewedHTML();
+        if(str_html === ''){
+            alert('您未输入内容！')
+            return;
+        }
         $.ajax({
             url: 'articles',
             type: 'POST',
             datatype: 'json',
             data: {
                 'mdHTML': str_html,
+                'timestamp': timestamp,
             },
             success: function () {
                 alert('博文发表成功！');

@@ -84,3 +84,71 @@
         </div>
     </div>
 </div>
+
+<!--引入-->
+{% comment %}<div class="container">
+    <!--Art1-->
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-8 well well-lg jumbotron">
+            <h1>岳翔的网站</h1>
+            <small>本行内容是在标签内</small><br>
+            <strong>本行内容是在标签内</strong><br>
+            <em>本行内容是在标签内，并呈现为斜体</em><br>
+            <p class="text-left">向左对齐文本向左对齐文本向左对齐文本向左对齐文本向左对齐文本向左对齐文本</p>
+            <p class="text-center">居中对齐文本</p>
+            <p class="text-right">向右对齐文本</p>
+            <p class="text-muted">本行内容是减弱的</p>
+            <p class="text-primary">本行内容带有一个 primary class</p>
+            <p class="text-success">本行内容带有一个 success class</p>
+            <p class="text-info">本行内容带有一个 info class</p>
+            <p class="text-warning">本行内容带有一个 warning class</p>
+            <p class="text-danger">本行内容带有一个 danger class</p>
+        </div>
+        <!--第二列-->
+        <div class="col-sm-2 well">
+            <h1>侧边栏</h1>
+            <p class="text-left">This is a string of testing text, here's a reminder,
+                fuck you motherfucker!<br />
+                ThisIsATesting, TextThisIsATesting, TextThisIsATestingT, extThisIsATestingText<br />
+                ThisIsATesting, TextThisIsATesting, TextThisIsATestingTe, xtThisIsATestingText</p>
+        </div>
+        <div class="col-sm-1">
+
+        </div>
+    </div>
+    <!--Art2-->
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8 well well-lg" >
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="main" style="width: available; height:400px;"></div>
+            <script type="text/javascript" src="static/js/plot1.js"></script>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <!--循环渲染博文-->
+    {% for article in articles %}
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8">
+            {% autoescape off %}
+                {{ article.1 }}
+            {% endautoescape %}
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    <button class="btn btn-primary" onclick="showMdEditor()" style="margin-bottom: 30px">显示编辑器</button>
+    <div class="row" style="display: none;" id="mdeditor">
+        <div class="col-sm-12 well">
+            <div id="test-editormd">
+                <textarea style="display:none;"></textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="log()" style="margin-top: 30px">提交</button>
+    </div>
+    {% endif %}
+</div>{% endcomment %}

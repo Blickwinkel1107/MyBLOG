@@ -1,15 +1,29 @@
 from django.shortcuts import render, redirect, HttpResponse
-from django.contrib import auth
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
-# 第四个是 auth中用户权限有关的类。auth可以设置每个用户的权限。
-
-
+from django.db import connection
+from django.views.decorators.csrf import csrf_exempt
+from pymysql import converters
 
 #index
 def index(req):
-    return render(req, 'index.html')
+    ctx = {}
+    c = connection.cursor()
+    c.execute('select * from articles')
+    ctx['articles'] = c.fetchall()
+    return render(req, 'index.html', ctx)
+
+@csrf_exempt
+def articles(req):
+    ctx = {}
+    c = connection.cursor()
+    c.execute('select * from articles')
+    ctx['articles'] = c.fetchall()
+    if req.is_ajax():
+        # print(req.body)
+        mdHTML = req.POST['mdHTML']
+        c.execute('select count(*) from articles')
+        nrows = c.fetchall()
+        c.execute('insert into articles(id, content) values(%s, %s)', [1 + nrows[0][0], mdHTML])
+    return render(req, 'articles.html', ctx)
 
 def hello(req):
     #return HttpResponse("hello world!")

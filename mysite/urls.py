@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^calc$', views.calc),
     url(r'^calc-post$', views.calc_post),
     url(r'^index$', views.index),
+    url(r'^articles$', views.articles),
     url(r'^admin/', admin.site.urls),
     # 别忘记在顶部引入 include 函数
     url(r'^users/', include('users.urls')),

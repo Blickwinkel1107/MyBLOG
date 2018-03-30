@@ -71,7 +71,7 @@
             <div id="test-editormd">
                 <textarea style="display:none;"></textarea>
             </div>
-            <button type="submit" class="btn btn-success btn-lg" onclick="getMdHTML()" style="margin-top: 10px;margin-left: 50px">
+            <button class="btn btn-success btn-lg" onclick="getMdHTML()" style="margin-top: 10px;margin-left: 50px">
                 发布博文！</button>
         </div>
     </div>
@@ -84,77 +84,49 @@
     <div class="clearfix visible-xs"></div>
     <div class="col-sm-1"></div>
     <!--left-->
-    <div class="col-sm-8">
+    <div class="col-sm-11">
         <!--循环渲染博文-->
-        {% for article in articles %}
+        {% for art in Arts %}
         <div class="row">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <div class="markdown-body editormd-html-preview">
-                        {% autoescape off %}
-                        {{ article.1 }}
-                        {% endautoescape %}
+            <div class="col-sm-8">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <div class="markdown-body editormd-html-preview">
+                            {% autoescape off %}
+                            {{ art.content }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+                {% if user.is_authenticated %}
+                <button onclick="delArt(this)" class="btn btn-danger" name="{{ art.time }}" style="margin-bottom: 30px">
+                    删除</button>
+                {% endif %}
+            </div>
+            <div class="clearfix visible-xs"></div>  <!--垂直排列-->
+            <div class="col-sm-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">评论区</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            {% for comm in art.comment %}
+                            <li>{{ comm.content }}</li>
+                            {% endfor %}
+                        </ul>
+                        <form role="form" method="post">
+                            <div class="form-group">
+                                <label for="name">写评论</label>
+                                <input type="text" name="comment" class="form-control" placeholder="一句话想法">
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">发表！</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
-    </div>
-    <div class="clearfix visible-xs"></div>  <!--垂直排列-->
-    <div class="col-sm-3">
-        <div class="panel-group" id="accordion">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseOne">
-                        点击我进行展开，再次点击我进行折叠。第 1 部分
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse in">
-                <div class="panel-body">
-                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-                    vice lomo.
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseTwo">
-                        点击我进行展开，再次点击我进行折叠。第 2 部分
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseTwo" class="panel-collapse collapse">
-                <div class="panel-body">
-                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-                    vice lomo.
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion"
-                       href="#collapseThree">
-                        点击我进行展开，再次点击我进行折叠。第 3 部分
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse">
-                <div class="panel-body">
-                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                    cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-                    vice lomo.
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
 </div>
 
@@ -204,7 +176,7 @@
         let timestamp = (new Date).valueOf();
         let str_html = editer.getPreviewedHTML();
         if(str_html === ''){
-            alert('您未输入内容！')
+            alert('您未输入内容！');
             return;
         }
         $.ajax({
@@ -212,11 +184,30 @@
             type: 'POST',
             datatype: 'json',
             data: {
+                'crateArt': true,
                 'mdHTML': str_html,
                 'timestamp': timestamp,
             },
             success: function () {
                 alert('博文发表成功！');
+                window.location.reload();
+            },
+            error: function(){
+                alert('失败~');
+            }
+        })
+    }
+    function delArt(btn){
+        $.ajax({
+            url: 'articles',
+            type: 'POST',
+            datatype: 'json',
+            data: {
+                'delArt': true,
+                'time': btn.getAttribute('name'),
+            },
+            success: function () {
+                alert('博文删除成功！');
                 window.location.reload();
             },
             error: function(){

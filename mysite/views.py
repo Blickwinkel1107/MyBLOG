@@ -27,6 +27,7 @@ def articles(req):
             Comms.append(Comm(it_comm[0], it_comm[1], it_comm[2], it_comm[3]))
         Arts.append(Art(it_art[0], it_art[1], Comms))
     ctx['Arts'] = Arts
+
     if req.is_ajax():
         # print(req.body)
         if req.POST.get('crateArt'):
@@ -35,10 +36,20 @@ def articles(req):
             c.execute('insert into articles(time, content) values(%s, %s)', (timestamp, mdHTML))
             siderName = 'sider-art-%s' % timestamp
             c.execute('CREATE TABLE `%s` (  `time` VARCHAR(30) NOT NULL,  `content` VARCHAR(100) NOT NULL,  `link` VARCHAR(30) NOT NULL,  `author` VARCHAR(30) NOT NULL,  PRIMARY KEY (`time`))', siderName)
+
         if req.POST.get('delArt'):
             c.execute('DELETE FROM `articles` WHERE `time`=%s', req.POST['time'])
             siderName = 'sider-art-%s' % req.POST['time']
             c.execute('DROP TABLE `%s`', siderName)
+
+        if req.POST.get('addComm'):
+            time = req.POST['timestamp']
+            link = req.POST['link']
+            content = req.POST['content']
+            author = req.POST['author']
+            siderName = 'sider-art-%s' % link
+            c.execute('insert into `%s` values(%s, %s, %s, %s)', (siderName, time, content, link, author))
+
     return render(req, 'articles.html', ctx)
 
 def hello(req):

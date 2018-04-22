@@ -1,9 +1,25 @@
-# 个人主页搭建 from 2018.3.14 to ?
+# 个人主页搭建 from 2018.3.14 to 2018.3.30
+
+
+## 技术栈
+- [x] Python
+- [x] Django
+- [x] HTML
+- [x] CSS
+- [x] Javascript
+- [x] jQuery & ajax简单语法
+- [x] Datebase
+- [x] Django模板语言
+- [x] 异步请求
+
+## 公告
+目前该工程告一段落，基本实现了项目报告中的需求
+
 
 ## 工具与环境
-* 前端：html + css + javascript with boostrap
-* 后端：Django MySQL Python
-* 第三方控件：MarkdownEditor Django登录注册模块
+- 前端：html + css + javascript with boostrap
+- 后端：Django MySQL Python
+- 第三方控件：MarkdownEditor Django登录注册模块
 
 ## 已经解决的难点
 - 前端基本布局设计 - boostrap
@@ -19,8 +35,7 @@
 - 侧边栏评论功能
 
 ## 还未解决的问题
-1. 评论功能未完全实现
-2. 首页和博文的跳转关系
+- 首页和博文的跳转关系
 
 ## 无关紧要的问题
 - 主页侧边栏的内容

@@ -9,6 +9,8 @@ def index(req):
     c = connection.cursor()
     c.execute('select * from articles')
     ctx['articles'] = c.fetchall()
+    c.execute('select * from sider')
+    ctx['sider'] = c.fetchall()
     return render(req, 'index.html', ctx)
 
 @csrf_exempt

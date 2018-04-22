@@ -71,17 +71,25 @@
 <div id="myCarousel" class="carousel slide" style="margin-bottom: 50px;">
     <!-- 轮播（Carousel）指标 -->
     <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
+        {% for img in imgs %}
+            {% if img == 1 %}
+            <li data-target="#myCarousel" data-slide-to="{{ img|add:-1 }}" class="active"></li>
+            {% else %}
+            <li data-target="#myCarousel" data-slide-to="{{ img|add:-1 }}"></li>
+            {% endif %}
+        {% endfor %}
     </ol>
     <!-- 轮播（Carousel）项目 -->
     <div class="carousel-inner">
-        <div class="item active">
-            <img src="static/img/1.jpg" alt="First slide">
-        </div>
-        <div class="item">
-            <img src="static/img/1.jpg" alt="Second slide">
-        </div>
+        {% for img in imgs %}
+            {% if img == 1 %}
+            <div class="item active">
+            {% else %}
+            <div class="item">
+            {% endif %}
+                <img src="static/img/{{ img }}.png" alt="{{ img }}">
+            </div>
+        {% endfor %}
     </div>
     <!-- 轮播（Carousel）导航 -->
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
